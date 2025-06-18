@@ -1,0 +1,122 @@
+Here are the contents for the file `/pdf-extractor-flask/pdf-extractor-flask/templates/single.html`:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single PDF Extractor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>PDF DATA EXTRACTOR</h1>
+            <form id="singleForm" action="{{ url_for('process') }}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="ebBoard">Select EB Board:</label>
+                    <select class="form-select" id="ebBoard" name="ebBoard" required>
+                        <option value="">-- Select Board --</option>
+                        <option value="Adani Electricity Mumbai Limited">Adani Electricity Mumbai Limited</option>
+                        <option value="Ajmer Vidyut Vitran Nigam Limited (AVVNL)">Ajmer Vidyut Vitran Nigam Limited (AVVNL)</option>
+                        <option value="Andhra Pradesh Central Power Distribution Corporation Limited">Andhra Pradesh Central Power Distribution Corporation Limited</option>
+                        <option value="APEPDCL">APEPDCL</option>
+                        <option value="APSPDCL">APSPDCL</option>
+                        <option value="Bangalore Electricity Supply Co. Ltd (BESCOM)">Bangalore Electricity Supply Co. Ltd (BESCOM)</option>
+                        <option value="Bharatpur Electricity Services Ltd. (BESL)">Bharatpur Electricity Services Ltd. (BESL)</option>
+                        <option value="Bikaner Electricity Supply Limited (BkESL)">Bikaner Electricity Supply Limited (BkESL)</option>
+                        <option value="BSES Rajdhani Power Limited">BSES Rajdhani Power Limited</option>
+                        <option value="CESC Limited">CESC Limited</option>
+                        <option value="Chamundeshwari Electricity Supply Corp Ltd (CESCOM)">Chamundeshwari Electricity Supply Corp Ltd (CESCOM)</option>
+                        <option value="Chhattisgarh State Power Distribution Co. Ltd">Chhattisgarh State Power Distribution Co. Ltd</option>
+                        <option value="Dakshin Gujarat Vij Company Limited (DGVCL)">Dakshin Gujarat Vij Company Limited (DGVCL)</option>
+                        <option value="Dakshin Haryana Bijli Vitran Nigam (DHBVN)">Dakshin Haryana Bijli Vitran Nigam (DHBVN)</option>
+                        <option value="Dakshinanchal Vidyut Vitran Nigam Limited (DVVNL)(Postpaid and Smart Prepaid Meter Recharge)">Dakshinanchal Vidyut Vitran Nigam Limited (DVVNL)(Postpaid and Smart Prepaid Meter Recharge)</option>
+                        <option value="Goa Electricity Department">Goa Electricity Department</option>
+                        <option value="Government of Puducherry Electricity Department">Government of Puducherry Electricity Department</option>
+                        <option value="Gulbarga Electricity Supply Company Limited">Gulbarga Electricity Supply Company Limited</option>
+                        <option value="Himachal Pradesh State Electricity Board">Himachal Pradesh State Electricity Board</option>
+                        <option value="Hubli Electricity Supply Company Ltd (HESCOM)">Hubli Electricity Supply Company Ltd (HESCOM)</option>
+                        <option value="Jaipur Vidyut Vitran Nigam (JVVNL)">Jaipur Vidyut Vitran Nigam (JVVNL)</option>
+                        <option value="Jammu and Kashmir Power Development Department">Jammu and Kashmir Power Development Department</option>
+                        <option value="Jharkhand Bijli Vitran Nigam Limited (JBVNL)">Jharkhand Bijli Vitran Nigam Limited (JBVNL)</option>
+                        <option value="Kanpur Electricity Supply Company">Kanpur Electricity Supply Company</option>
+                        <option value="Kerala State Electricity Board Ltd. (KSEBL)">Kerala State Electricity Board Ltd. (KSEBL)</option>
+                        <option value="Kota Electricity Distribution Limited (KEDL)">Kota Electricity Distribution Limited (KEDL)</option>
+                        <option value="M.P. Madhya Kshetra Vidyut Vitaran - RURAL">M.P. Madhya Kshetra Vidyut Vitaran - RURAL</option>
+                        <option value="M.P. Madhya Kshetra Vidyut Vitaran - URBAN">M.P. Madhya Kshetra Vidyut Vitaran - URBAN</option>
+                        <option value="M.P. Paschim Kshetra Vidyut Vitaran">M.P. Paschim Kshetra Vidyut Vitaran</option>
+                        <option value="M.P. Poorv Kshetra Vidyut Vitaran - RURAL">M.P. Poorv Kshetra Vidyut Vitaran - RURAL</option>
+                        <option value="Madhya Gujarat Vij Company Limited (MGVCL)">Madhya Gujarat Vij Company Limited (MGVCL)</option>
+                        <option value="Madhyanchal Vidyut Vitran Nigam Limited (MVVNL)(Postpaid and Smart Prepaid Meter Recharge)">Madhyanchal Vidyut Vitran Nigam Limited (MVVNL)(Postpaid and Smart Prepaid Meter Recharge)</option>
+                        <option value="Maharashtra State Electricity Distbn Co Ltd">Maharashtra State Electricity Distbn Co Ltd</option>
+                        <option value="Mangalore Electricity Supply Co. Ltd (MESCOM) - RAPDR">Mangalore Electricity Supply Co. Ltd (MESCOM) - RAPDR</option>
+                        <option value="New Delhi Municipal Council (NDMC) - Electricity">New Delhi Municipal Council (NDMC) - Electricity</option>
+                        <option value="North Bihar Power Distribution Company Ltd.">North Bihar Power Distribution Company Ltd.</option>
+                        <option value="Paschim Gujarat Vij Company Limited (PGVCL)">Paschim Gujarat Vij Company Limited (PGVCL)</option>
+                        <option value="Paschimanchal Vidyut Vitran Nigam Limited (PVVNL)(Postpaid and Smart Prepaid Meter Recharge)">Paschimanchal Vidyut Vitran Nigam Limited (PVVNL)(Postpaid and Smart Prepaid Meter Recharge)</option>
+                        <option value="Punjab State Power Corporation Ltd (PSPCL)">Punjab State Power Corporation Ltd (PSPCL)</option>
+                        <option value="Purvanchal Vidyut Vitran Nigam Limited(PUVVNL)(Postpaid and Smart Prepaid Meter Recharge)">Purvanchal Vidyut Vitran Nigam Limited(PUVVNL)(Postpaid and Smart Prepaid Meter Recharge)</option>
+                        <option value="South Bihar Power Distribution Company Ltd.">South Bihar Power Distribution Company Ltd.</option>
+                        <option value="Tamil Nadu Electricity Board (TNEB)">Tamil Nadu Electricity Board (TNEB)</option>
+                        <option value="Tata Power - Mumbai">Tata Power - Mumbai</option>
+                        <option value="TGNPDCL">TGNPDCL</option>
+                        <option value="Torrent Power">Torrent Power</option>
+                        <option value="TP Ajmer Distribution Ltd (TPADL)">TP Ajmer Distribution Ltd (TPADL)</option>
+                        <option value="TP Central Odisha Distribution Ltd.">TP Central Odisha Distribution Ltd.</option>
+                        <option value="TP Northern Odisha Distribution Limited">TP Northern Odisha Distribution Limited</option>
+                        <option value="TP Southern Odisha Distribution Limited">TP Southern Odisha Distribution Limited</option>
+                        <option value="TP Western Odisha Distribution Limited">TP Western Odisha Distribution Limited</option>
+                        <option value="TSSPDCL">TSSPDCL</option>
+                        <option value="Uttar Gujarat Vij Company Limited (UGVCL)">Uttar Gujarat Vij Company Limited (UGVCL)</option>
+                        <option value="Uttar Haryana Bijli Vitran Nigam (UHBVN)">Uttar Haryana Bijli Vitran Nigam (UHBVN)</option>
+                        <option value="Uttarakhand Power Corporation Limited">Uttarakhand Power Corporation Limited</option>
+                        <option value="West Bengal Electricity">West Bengal Electricity</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload PDF Bill:</label>
+                    <div class="file-input" id="pdfInput">Choose PDF File</div>
+                    <input type="file" id="pdfFile" name="pdfFile" accept=".pdf" required>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                    EXTRACT DATA
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('singleForm');
+        const pdfInput = document.getElementById('pdfInput');
+        const pdfFile = document.getElementById('pdfFile');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Handle file selection
+        pdfInput.addEventListener('click', () => pdfFile.click());
+        
+        pdfFile.addEventListener('change', () => {
+            if (pdfFile.files.length > 0) {
+                pdfInput.textContent = pdfFile.files[0].name;
+                checkFormValidity();
+            }
+        });
+
+        // Check form validity
+        function checkFormValidity() {
+            submitBtn.disabled = !form.checkValidity();
+        }
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            window.location.href = "single_processing.html";
+        });
+
+        // Check form validity when EB board is selected
+        document.getElementById('ebBoard').addEventListener('change', checkFormValidity);
+    </script>
+</body>
+</html>

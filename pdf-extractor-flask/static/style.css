@@ -1,0 +1,129 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    max-width: 500px;
+    width: 100%;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    color: white;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+label {
+    display: block;
+    color: white;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    font-size: 16px;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+select:focus {
+    outline: none;
+    border-color: #f093fb;
+    box-shadow: 0 0 0 2px rgba(240, 147, 251, 0.3);
+}
+
+.form-group::after {
+    content: "▼";
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    color: white;
+    pointer-events: none;
+    font-size: 12px;
+}
+
+select option {
+    background: #764ba2;
+    color: white;
+    padding: 10px;
+}
+
+select option:hover {
+    background: #f093fb;
+}
+
+.file-input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.file-input:hover {
+    border-color: #f093fb;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: transform 0.3s;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+    background: rgba(255, 255, 255, 0.2);
+    cursor: not-allowed;
+    transform: none;
+}
+
+input[type="file"] {
+    display: none;
+}

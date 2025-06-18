@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single PDF Extractor</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --accent-color: #f093fb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            color: white;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.2);
+            color: white;
+            font-size: 16px;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(240, 147, 251, 0.3);
+        }
+
+        .form-group::after {
+            content: "▼";
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            color: white;
+            pointer-events: none;
+            font-size: 12px;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.2);
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-input:hover, .file-input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background: rgba(255,255,255,0.2);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        #processingSection {
+            display: none;
+            text-align: center;
+        }
+
+        .pdf-loader {
+            width: 120px;
+            height: 150px;
+            margin: 0 auto 40px;
+            position: relative;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .pdf-loader:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                rgba(255,255,255,0.4) 20%, 
+                rgba(255,255,255,0.4) 40%, 
+                transparent 100%);
+            animation: pdfScan 1s infinite linear;
+        }
+
+        @keyframes pdfScan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        p {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 30px;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: var(--success-gradient);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .status-message {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            margin: 10px 0;
+            min-height: 20px;
+        }
+
+        .results {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .download-btn, .show-result-btn {
+            display: inline-block;
+            padding: 14px 30px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 10px 5px;
+        }
+
+        .download-btn {
+            background: var(--success-gradient);
+        }
+
+        .show-result-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .download-btn:hover, .show-result-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+        }
+        
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: #4CAF50;
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: #4CAF50;
+            fill: none;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            color: white;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--accent-color);
+        }
+
+        .modal-content pre {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Form Section -->
+        <div class="card" id="formSection">
+            <h1>PDF DATA EXTRACTOR</h1>
+            <form id="singleForm" action="/extract" method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <label for="ebBoard">Select EB Board:</label>
+                    <select id="ebBoard" name="eb_board" required aria-label="Select Electricity Board">
+                        <option value="">-- Select Board --</option>
+                        {% for board in boards %}
+                            <option value="{{ board }}">{{ board }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="pdfFile">Upload PDF Bill:</label>
+                    <div class="file-input" id="pdfInput" role="button" aria-label="Choose PDF File" tabindex="0">Choose PDF File</div>
+                    <input type="file" id="pdfFile" name="pdf_file" accept=".pdf" required>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                    EXTRACT DATA
+                </button>
+            </form>
+        </div>
+
+        <!-- Processing Section -->
+        <div class="card" id="processingSection">
+            <!-- Loader Section -->
+            <div id="loaderSection">
+                <div class="pdf-loader"></div>
+                <h2>PROCESSING PDF</h2>
+                <p>Extracting data with AI precision</p>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                
+                <div class="status-message" id="statusMessage" aria-live="polite">Initializing extraction...</div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results" id="resultsSection">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+                <h2>EXTRACTION COMPLETE</h2>
+                <p>Your PDF data has been successfully processed</p>
+                <div class="button-group">
+                    <a href="#" class="download-btn" id="downloadBtn" download="extracted_data.json">DOWNLOAD RESULTS</a>
+                    <button class="show-result-btn" id="showResultBtn">SHOW RESULT</button>
+                </div>
+                <button class="submit-btn" id="newExtractionBtn" style="margin-top: 15px;">
+                    NEW EXTRACTION
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal for JSON Display -->
+        <div class="modal" id="jsonModal" role="dialog" aria-labelledby="jsonModalTitle">
+            <div class="modal-content">
+                <span class="modal-close" id="modalClose" role="button" aria-label="Close Modal">&times;</span>
+                <h2 id="jsonModalTitle">Extracted Data</h2>
+                <pre id="jsonContent"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('singleForm');
+        const pdfInput = document.getElementById('pdfInput');
+        const pdfFile = document.getElementById('pdfFile');
+        const submitBtn = document.getElementById('submitBtn');
+        const formSection = document.getElementById('formSection');
+        const processingSection = document.getElementById('processingSection');
+        const loaderSection = document.getElementById('loaderSection');
+        const resultsSection = document.getElementById('resultsSection');
+        const progressBar = document.getElementById('progressBar');
+        const statusMessage = document.getElementById('statusMessage');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const showResultBtn = document.getElementById('showResultBtn');
+        const newExtractionBtn = document.getElementById('newExtractionBtn');
+        const jsonModal = document.getElementById('jsonModal');
+        const modalClose = document.getElementById('modalClose');
+        const jsonContent = document.getElementById('jsonContent');
+        let jsonData = null;
+
+        // Handle file selection
+        pdfInput.addEventListener('click', () => pdfFile.click());
+        pdfInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === 'Space') pdfFile.click();
+        });
+        
+        pdfFile.addEventListener('change', () => {
+            if (pdfFile.files.length > 0) {
+                const file = pdfFile.files[0];
+                if (file.type !== 'application/pdf') {
+                    alert('Please upload a PDF file.');
+                    pdfFile.value = '';
+                    pdfInput.textContent = 'Choose PDF File';
+                    return;
+                }
+                pdfInput.textContent = file.name;
+                checkFormValidity();
+            }
+        });
+
+        // Check form validity
+        function checkFormValidity() {
+            submitBtn.disabled = !form.checkValidity();
+        }
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            formSection.style.display = 'none';
+            processingSection.style.display = 'block';
+            loaderSection.style.display = 'block';
+            resultsSection.style.display = 'none';
+            startProcessing();
+
+            try {
+                const response = await fetch('/extract', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) {
+                    const error = await response.json();
+                    loaderSection.style.display = 'none';
+                    statusMessage.textContent = error.error;
+                    setTimeout(() => {
+                        formSection.style.display = 'block';
+                        processingSection.style.display = 'none';
+                        form.reset();
+                        pdfInput.textContent = 'Choose PDF File';
+                        submitBtn.disabled = true;
+                    }, 2000);
+                    return;
+                }
+                const blob = await response.blob();
+                const text = await blob.text();
+                jsonData = JSON.parse(text); // Store JSON data
+                const url = window.URL.createObjectURL(blob);
+                downloadBtn.href = url;
+                loaderSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+            } catch (err) {
+                loaderSection.style.display = 'none';
+                statusMessage.textContent = 'An error occurred. Please try again.';
+                setTimeout(() => {
+                    formSection.style.display = 'block';
+                    processingSection.style.display = 'none';
+                    form.reset();
+                    pdfInput.textContent = 'Choose PDF File';
+                    submitBtn.disabled = true;
+                }, 2000);
+            }
+        });
+
+        // Show JSON result
+        showResultBtn.addEventListener('click', () => {
+            if (jsonData) {
+                jsonContent.textContent = JSON.stringify(jsonData, null, 2);
+                jsonModal.style.display = 'flex';
+            }
+        });
+
+        // Close modal
+        modalClose.addEventListener('click', () => {
+            jsonModal.style.display = 'none';
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && jsonModal.style.display === 'flex') {
+                jsonModal.style.display = 'none';
+            }
+        });
+
+        // Close modal when clicking outside
+        jsonModal.addEventListener('click', (e) => {
+            if (e.target === jsonModal) {
+                jsonModal.style.display = 'none';
+            }
+        });
+
+        // Check form validity when EB board is selected
+        document.getElementById('ebBoard').addEventListener('change', checkFormValidity);
+
+        // New extraction button
+        newExtractionBtn.addEventListener('click', () => {
+            form.reset();
+            pdfInput.textContent = 'Choose PDF File';
+            submitBtn.disabled = true;
+            formSection.style.display = 'block';
+            processingSection.style.display = 'none';
+            jsonData = null; // Clear previous JSON data
+        });
+
+        // Simulate processing
+        function startProcessing() {
+            const steps = [
+                {progress: 20, message: "Analyzing document structure..."},
+                {progress: 40, message: "Extracting text content..."},
+                {progress: 60, message: "Processing images and tables..."},
+                {progress: 80, message: "Organizing extracted data..."},
+                {progress: 95, message: "Finalizing results..."},
+                {progress: 100, message: "Done!"}
+            ];
+            
+            let currentStep = 0;
+            
+            function updateProgress() {
+                if (currentStep < steps.length) {
+                    const step = steps[currentStep];
+                    progressBar.style.width = step.progress + '%';
+                    statusMessage.textContent = step.message;
+                    currentStep++;
+                    const delay = currentStep < 3 ? 800 : 
+                                  currentStep < 5 ? 1200 : 1500;
+                    setTimeout(updateProgress, delay);
+                }
+            }
+            
+            setTimeout(updateProgress, 1000);
+        }
+    </script>
+</body>
+</html>

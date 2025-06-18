@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Processing Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Processing Result</h1>
+            <p>EB Board Selected: <strong>{{ eb_board }}</strong></p>
+            <p>Uploaded PDF File: <strong>{{ filename }}</strong></p>
+            <p>Your PDF has been processed successfully!</p>
+            <!-- Here you can add more details about the extracted data if needed -->
+            <a href="{{ url_for('index') }}" class="submit-btn">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
