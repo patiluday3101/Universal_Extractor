@@ -113,7 +113,7 @@ python app.py <path_to_pdf>
 ### Example
 
 ```bash
-python app.py sample_bills/BESCOM_sample.pdf
+python app.py uploads/BESCOM_sample.pdf
 ```
 
 ---
@@ -123,7 +123,7 @@ python app.py sample_bills/BESCOM_sample.pdf
 Sample PDFs are available in:
 
 ```bash
-sample_bills/
+uploads/
 ```
 
 👉 Use them to quickly test extraction across different providers.
