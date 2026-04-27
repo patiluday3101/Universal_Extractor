@@ -20,6 +20,7 @@ This project solves that by combining:
 
 ---
 
+
 ## 🔥 Key Highlights
 
 * 🧩 Supports **47 electricity board providers**
@@ -31,7 +32,25 @@ This project solves that by combining:
 * 🏗️ Designed for real-world scalability
 
 ---
+## 🎥 Demo
 
+👉 [▶️ Watch Demo Video](https://youtu.be/NAvAN_Ekot4)
+
+This demo shows:
+
+* PDF input
+* Automatic provider detection
+* Structured output generation
+* OCR handling for scanned bills
+
+---
+## 📸 Screenshots
+
+### 🔹 Input / UI
+![UI Screenshot](ui.png)
+
+### 🔹 Output
+![Output Screenshot](output.png)
 ## 🏢 Supported Providers
 
 Includes **47 providers**, such as:
@@ -147,26 +166,6 @@ The system extracts multiple categories:
 * 📈 Financial Insights
 
 ---
-
-## 🎥 Demo
-
-👉 [▶️ Watch Demo Video](https://youtu.be/NAvAN_Ekot4)
-
-This demo shows:
-
-* PDF input
-* Automatic provider detection
-* Structured output generation
-* OCR handling for scanned bills
-
----
-## 📸 Screenshots
-
-### 🔹 Input / UI
-![UI Screenshot](ui.png)
-
-### 🔹 Output
-![Output Screenshot](output.png)
 
 ## 📊 Accuracy & Performance
 
